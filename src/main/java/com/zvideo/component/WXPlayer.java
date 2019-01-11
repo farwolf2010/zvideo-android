@@ -24,6 +24,7 @@ public class WXPlayer extends WXVContainer<VideoView> {
         VideoView v=new VideoView(context);
         v.setBackgroundColor(Color.BLACK);
         v.getVideoInfo().setBgColor(Color.BLACK);
+
 //         v.getVideoInfo().setBgColor(Color.GRAY).setAspectRatio(VideoInfo.AR_MATCH_PARENT);/
         return v;
     }
@@ -55,6 +56,11 @@ public class WXPlayer extends WXVContainer<VideoView> {
     @JSMethod
     public void toggleFullScreen(){
         getHostView().getPlayer().toggleFullScreen();
+    }
+
+
+    public void full(){
+
     }
 
 
