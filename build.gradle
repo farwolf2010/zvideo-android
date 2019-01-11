@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+repositories {
+    jcenter()
+    mavenCentral();
+    mavenCentral(url: "https://dl.bintray.com/ycjiang/ycjiang")
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+//    api 'com.ycjiang:VideoPlayModule:2.3.17'
+    api 'fm.jiecao:jiecaovideoplayer:1.6'
+    api 'com.github.tcking:giraffeplayer2:0.1.25-full'
+//    api 'com.github.tcking:ijkplayer-arm64:0.8.8-full' //support arm64
+//    api 'com.github.tcking:ijkplayer-armv5:0.8.8-full' //support armv5
+//    api 'com.github.tcking:ijkplayer-x86:0.8.8-full' //support x86
+//    api 'com.github.tcking:ijkplayer-x86_64:0.8.8-full' //support x86_64
+    api "com.github.tcking:ijkplayer-java:0.8.8"
+    api "com.github.tcking:ijkplayer-armv7a:0.8.8"
+    api project(':farwolf.weex')
+}
