@@ -30,6 +30,7 @@ public class WXZVideo extends  WXVContainer<JCVideoPlayer>{
 //        VideoPlayerView player=new VideoPlayerView(context);
         JCVideoPlayer player=new JCVideoPlayer(context,null);
 //        VideoPlayerManager.getInstance().getVideoPlayer()
+
         return player;
     }
 
