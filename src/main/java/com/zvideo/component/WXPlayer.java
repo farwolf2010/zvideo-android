@@ -1,12 +1,17 @@
 package com.zvideo.component;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.farwolf.weex.annotation.WeexComponent;
+import com.farwolf.weex.util.Weex;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.ui.action.BasicComponentData;
@@ -14,6 +19,8 @@ import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import tcking.github.com.giraffeplayer2.GiraffePlayer;
 import tcking.github.com.giraffeplayer2.PlayerListener;
@@ -23,6 +30,8 @@ import tv.danmaku.ijk.media.player.IjkTimedText;
 @WeexComponent(name="player")
 public class WXPlayer extends WXVContainer<LinearLayout> {
     VideoView player;
+    Timer timer;
+    boolean compelete;
     public WXPlayer(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
     }
@@ -31,6 +40,8 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
     protected LinearLayout initComponentHostView(@NonNull Context context) {
         LinearLayout l=new LinearLayout(context);
         VideoView v=new VideoView(context);
+
+//        player.getCoverView().setImageDrawable(getContext().getResources().getDrawable(com.farwolf.libary.R.drawable.abc_ab_share_pack_mtrl_alpha));
         v.setBackgroundColor(Color.BLACK);
         v.getVideoInfo().setBgColor(Color.BLACK);
         l.addView(v);
@@ -56,7 +67,11 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
 
             @Override
             public void onCompletion(GiraffePlayer giraffePlayer) {
+
                 WXPlayer.this.fireEvent("onCompletion");
+                cancelTimer();
+                firePlaying(true);
+
             }
 
             @Override
@@ -67,6 +82,7 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
             @Override
             public boolean onError(GiraffePlayer giraffePlayer, int what, int extra) {
                 WXPlayer.this.fireEvent("onError");
+                cancelTimer();
                 return false;
             }
 
@@ -82,7 +98,12 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
 
             @Override
             public void onStart(GiraffePlayer giraffePlayer) {
-                WXPlayer.this.fireEvent("onStart");
+                HashMap m=new HashMap();
+                compelete=false;
+                m.put("position", player.getPlayer().getCurrentPosition());
+                WXPlayer.this.fireEvent("onStart",m);
+                statTimer();
+
             }
 
             @Override
@@ -118,7 +139,6 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
             public void onTimedText(GiraffePlayer giraffePlayer, IjkTimedText text) {
                 HashMap m=new HashMap();
                 m.put("text",text.getText());
-
                 WXPlayer.this.fireEvent("onTimedText",m);
             }
 
@@ -164,6 +184,19 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
        }
     }
 
+    @WXComponentProp(name = "img")
+    public void setImg(String src){
+       src= Weex.getRootUrl(src,getInstance());
+       if(player!=null){
+           Glide
+                   .with((Activity)getContext())
+                   .load(src)
+                   .into( player.getCoverView());
+       }
+
+    }
+
+
     @JSMethod
     public void seek(int sec){
         player.getPlayer().seekTo(sec);
@@ -184,6 +217,67 @@ public class WXPlayer extends WXVContainer<LinearLayout> {
     @JSMethod
     public void toggleFullScreen(){
         player.getPlayer().toggleFullScreen();
+    }
+
+
+
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1){
+                //do something
+                ((Activity)getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        firePlaying(false);
+                    }
+                });
+
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    public void firePlaying(boolean compelete){
+        HashMap m=new HashMap();
+        m.put("current",player.getPlayer().getCurrentPosition());
+        m.put("total",player.getPlayer().getDuration());
+
+        this.compelete=compelete;
+        if(this.compelete){
+            m.put("percent",1);
+            fireEvent("onPlaying",m);
+            cancelTimer();
+        }else{
+            if(player.getPlayer().getDuration()!=0)
+                m.put("percent",player.getPlayer().getCurrentPosition()/(float)player.getPlayer().getDuration());
+            else
+                m.put("percent",0);
+            fireEvent("onPlaying",m);
+        }
+
+
+
+    }
+
+    public void cancelTimer(){
+       if(timer!=null)
+           timer.cancel();
+    }
+
+    public void statTimer(){
+//        timerTask.scheduledExecutionTime();
+         timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
+            }
+        };
+        timer.schedule(timerTask,0,500);
     }
 
 
