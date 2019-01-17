@@ -2,7 +2,10 @@ package com.zvideo.component;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.farwolf.weex.annotation.WeexComponent;
@@ -16,12 +19,18 @@ import com.taobao.weex.ui.component.WXVContainer;
 import org.song.videoplayer.DemoQSVideoView;
 import org.song.videoplayer.PlayListener;
 
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 //import chuangyuan.ycj.videolibrary.video.VideoPlayerManager;
 //import chuangyuan.ycj.videolibrary.widget.VideoPlayerView;
 
-@WeexComponent(name="pvideo")
+@WeexComponent(name="player")
 public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
-
+    Timer timer;
+    boolean compelete;
+    String title;
 
     public WXPVideo(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
@@ -45,8 +54,31 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
             }
 
             @Override
-            public void onEvent(int what, Integer... extra) {
-
+            public void onEvent(int status, Integer... extra) {
+                if(status==11)
+                {
+                    WXPVideo.this.fireEvent("onPrepared");
+                }
+                else if(status==12)
+                {
+                    WXPVideo.this.fireEvent("onStart");
+                    statTimer();
+                }
+                else if(status==13)
+                {
+                    WXPVideo.this.fireEvent("onPause");
+                }
+                else   if(status==18){
+                    WXPVideo.this.fireEvent("onCompletion");
+                    cancelTimer();
+                    firePlaying(true);
+                }
+                else   if(status==20){
+                    WXPVideo.this.fireEvent("onSeekComplete");
+                }
+                else   if(status==16){
+                    WXPVideo.this.fireEvent("onError");
+                }
             }
         });
 
@@ -77,7 +109,7 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     @WXComponentProp(name = "src")
     public void setSrc(String src)
     {
-        getHostView().setUp(src,null,"");
+        getHostView().setUp(src,this.title+"");
     }
 
     @JSMethod
@@ -100,12 +132,15 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     @WXComponentProp(name = "title")
     public void setTitle(String title)
     {
-       getHostView().setUp(getHostView().getUrl(),title);
-//        ((TextView)getHostView().findViewById(R.id.title)).setText(title);
+        this.title=title;
+//       getHostView().setUp(getHostView().getUrl(),title);
+        TextView t= ((TextView)getHostView().findViewById(org.song.videoplayer.R.id.title));
+        if(t!=null)
+        t.setText(title);
     }
 
     @JSMethod
-    public void full(){
+    public void fullScreen(){
 
         getHostView().enterWindowFullscreen();
 
@@ -117,13 +152,67 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
         getHostView().quitWindowFullscreen();
     }
 
-    @JSMethod
-    public void toggleFullScreen(){
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1){
+                //do something
+                ((Activity)getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        firePlaying(false);
+                    }
+                });
+
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    public void firePlaying(boolean compelete){
+        HashMap m=new HashMap();
+        m.put("current",getHostView().getPosition());
+        m.put("total",getHostView().getDuration());
+
+        this.compelete=compelete;
+        if(this.compelete){
+            m.put("percent",1);
+            fireEvent("onPlaying",m);
+            cancelTimer();
+        }else{
+            if(getHostView().getDuration()!=0)
+                m.put("percent",getHostView().getPosition()/(float)getHostView().getDuration());
+            else
+                m.put("percent",0);
+            fireEvent("onPlaying",m);
+        }
+
+
 
     }
 
+    public void cancelTimer(){
+       if(timer!=null)
+           timer.cancel();
+    }
 
-
+    public void statTimer(){
+//        timerTask.scheduledExecutionTime();
+        if(timer!=null) {
+            timer.cancel();
+        }
+         timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
+            }
+        };
+        timer.schedule(timerTask,0,500);
+    }
 
 
 
