@@ -27,13 +27,15 @@ repositories {
     jcenter()
     mavenCentral();
     mavenCentral(url: "https://dl.bintray.com/ycjiang/ycjiang")
+    mavenCentral(url: "https://jitpack.io")
 }
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api 'fm.jiecao:jiecaovideoplayer:1.6'
-    api 'com.github.tcking:giraffeplayer2:0.1.25-full'
-    api "com.github.tcking:ijkplayer-java:0.8.8"
-    api "com.github.tcking:ijkplayer-armv7a:0.8.8"
+//    api 'com.github.tcking:giraffeplayer2:0.1.25-full'
+//    api "com.github.tcking:ijkplayer-java:0.8.8"
+//    api "com.github.tcking:ijkplayer-armv7a:0.8.8"
+    api 'com.github.tohodog:QSVideoPlayer:2.2.7'
     api project(':farwolf.weex')
 }
