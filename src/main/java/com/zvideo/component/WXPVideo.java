@@ -50,7 +50,12 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
 
             @Override
             public void onMode(int mode) {
-
+                    if(mode==101){
+                        WXPVideo.this.fireEvent("onFullScreen");
+                    }
+                    else{
+                        WXPVideo.this.fireEvent("onNormalScreen");
+                    }
             }
 
             @Override
@@ -147,9 +152,10 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     }
 
     @JSMethod
-    public void quit(){
+    public void quitFullScreen(){
 //        VE_SURFACEHOLDER_FINISH_FULLSCREEN
         getHostView().quitWindowFullscreen();
+
     }
 
 
