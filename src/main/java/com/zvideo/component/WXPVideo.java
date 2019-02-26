@@ -110,6 +110,15 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
         }
     }
 
+    @WXComponentProp(name = "current")
+    public void setPosition(int position){
+        if( getHostView()!=null){
+            getHostView().seekTo(position);
+        }
+//        getHostView().getCurrentState()
+    }
+
+
 
     @WXComponentProp(name = "src")
     public void setSrc(String src)
