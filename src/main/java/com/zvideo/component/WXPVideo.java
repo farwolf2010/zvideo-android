@@ -15,6 +15,7 @@ import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.zvideo.view.VideoView;
 
 import org.song.videoplayer.DemoQSVideoView;
 import org.song.videoplayer.PlayListener;
@@ -22,6 +23,8 @@ import org.song.videoplayer.PlayListener;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import wbs.hundsun.com.zvideo.R;
 
 //import chuangyuan.ycj.videolibrary.video.VideoPlayerManager;
 //import chuangyuan.ycj.videolibrary.widget.VideoPlayerView;
@@ -37,9 +40,10 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     }
 
     @Override
-    protected DemoQSVideoView initComponentHostView(@NonNull Context context) {
+    protected VideoView initComponentHostView(@NonNull Context context) {
 //        VideoPlayerView player=new VideoPlayerView(context);
-        DemoQSVideoView qsVideoView=new DemoQSVideoView(context);
+        VideoView qsVideoView=new VideoView(context);
+        qsVideoView.instace=this.mInstance;
 //        JCVideoPlayer player=new JCVideoPlayer(context,null);
 //        VideoPlayerManager.getInstance().getVideoPlayer()
         qsVideoView.setPlayListener(new PlayListener() {
@@ -110,7 +114,7 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
         }
     }
 
-    @WXComponentProp(name = "current")
+    @WXComponentProp(name = "pos")
     public void setPosition(int position){
         if( getHostView()!=null){
             getHostView().seekTo(position);
@@ -148,7 +152,7 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     {
         this.title=title;
 //       getHostView().setUp(getHostView().getUrl(),title);
-        TextView t= ((TextView)getHostView().findViewById(org.song.videoplayer.R.id.title));
+        TextView t= ((TextView)getHostView().findViewById(R.id.title));
         if(t!=null)
         t.setText(title);
     }
