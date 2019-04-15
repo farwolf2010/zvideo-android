@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.ViewGroup;
 
+import com.farwolf.weex.activity.WeexActivity;
 import com.taobao.weex.WXSDKInstance;
 
 import org.song.videoplayer.DemoQSVideoView;
@@ -50,43 +51,30 @@ public class VideoView extends DemoQSVideoView {
     //全屏
     @Override
     public void enterWindowFullscreen() {
+//        WeexActivity ac=  (WeexActivity)instace.getContext();
+//        boolean ispotrait=ac.getIntent().getBooleanExtra("isPortrait",true);
         if (currentMode == MODE_WINDOW_NORMAL) {
             super.enterWindowFullscreen();
-//            boolean flag = false;
-//            if (enterFullMode == 3) {
-//                flag = true;
-//                enterFullMode = height > width ? 1 : 0;
-//            }
-//
-//            full_flag = Util.SET_FULL(getContext());
-//            orientation_flag = Util.isScreenOriatationPortrait(getContext());
-//
-//            if (enterFullMode == 0)
-//                Util.SET_LANDSCAPE(getContext());
-//            else if (enterFullMode == 1)
-//                Util.SET_PORTRAIT(getContext());
-//            else if (enterFullMode == 2)
-//                Util.SET_SENSOR(getContext());
-//            if (flag)
-//                enterFullMode = 3;
-//
-//            Util.showNavigationBar(getContext(), false);
-//
-//            ViewGroup vp = (ViewGroup) videoView.getParent();
-//            if (vp != null)
-//                vp.removeView(videoView);
-//            ViewGroup decorView = (ViewGroup) (Util.scanForActivity(instace.getContext())).getWindow().getDecorView();
-//            //.findViewById(Window.ID_ANDROID_CONTENT);
-//            decorView.addView(videoView, new LayoutParams(-1, -1));
-//            setStateAndMode(currentState, MODE_WINDOW_FULLSCREEN);
             ViewGroup vp = (ViewGroup) videoView.getParent();
             if (vp != null)
                 vp.removeView(videoView);
             ViewGroup decorView = (ViewGroup) (Util.scanForActivity(instace.getContext())).getWindow().getDecorView();
             decorView.addView(videoView, new LayoutParams(-1, -1));
+            Util.SET_LANDSCAPE(getContext());
         }
     }
 
 
+    @Override
+    public void quitWindowFullscreen() {
+        super.quitWindowFullscreen();
+        WeexActivity ac=  (WeexActivity)instace.getContext();
+        boolean ispotrait=ac.getIntent().getBooleanExtra("isPortrait",true);
+        if(ispotrait){
+            Util.SET_PORTRAIT(getContext());
+        }else{
+            Util.SET_LANDSCAPE(getContext());
+        }
 
+    }
 }
