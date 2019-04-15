@@ -110,7 +110,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:transition-27.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.test.espresso:espresso-idling-resource-2.2.2" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:/Users/zhengjiangrong/Desktop/xop/platforms/android/farwolf/libs/volley.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: fm.jiecao:jiecaovideoplayer-1.6" level="project" />
     <orderEntry type="library" name="Gradle: cn.finalteam:toolsfinal-1.1.5" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-27.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-compat-27.0.2" level="project" />
@@ -127,13 +126,13 @@
     <orderEntry type="library" name="Gradle: tv.danmaku.ijk.media:ijkplayer-armv7a-0.8.8" level="project" />
     <orderEntry type="library" name="Gradle: com.danikula:videocache-2.7.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.14.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.tohodog:QSVideoPlayer-2.2.7" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-r1.5.11" level="project" />
     <orderEntry type="library" name="Gradle: com.taobao.android:weex_inspector-0.20.3.0-beta" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:/Users/zhengjiangrong/Desktop/xop/platforms/android/farwolf/libs/httpmime-4.1.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.wang.avi:library-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.taobao.android.weex_inspection:protocol-1.1.4.1" level="project" />
     <orderEntry type="library" name="Gradle: com.tbruyelle.rxpermissions2:rxpermissions-0.9.4" level="project" />
-    <orderEntry type="library" name="Gradle: de.greenrobot:eventbus:2.4.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v4-27.0.2" level="project" />
     <orderEntry type="library" name="Gradle: tv.danmaku.ijk.media:ijkplayer-java-0.8.8" level="project" />
     <orderEntry type="library" name="Gradle: com.lzy.net:okgo-3.0.4" level="project" />
