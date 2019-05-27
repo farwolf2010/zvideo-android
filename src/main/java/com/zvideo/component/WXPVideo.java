@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.farwolf.weex.annotation.WeexComponent;
+import com.farwolf.weex.util.Const;
 import com.farwolf.weex.util.Weex;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
@@ -105,6 +107,13 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
        }
 
     }
+
+
+    @JSMethod
+    public void hideBottomBar(boolean hide){
+         getHostView().findViewById(org.song.videoplayer.R.id.layout_bottom).setVisibility(hide?View.GONE:View.VISIBLE);
+    }
+
     @WXComponentProp(name = "autoPlay")
     public void setAutoPlay(boolean auto){
         if(auto){
@@ -127,6 +136,8 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     @WXComponentProp(name = "src")
     public void setSrc(String src)
     {
+        src= Weex.getRelativeUrl(src,mInstance);
+        src=src.replace(Const.PREFIX_SDCARD,"file://");
         getHostView().setUp(src,this.title+"");
     }
 

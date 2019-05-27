@@ -55,12 +55,13 @@ public class VideoView extends DemoQSVideoView {
 //        boolean ispotrait=ac.getIntent().getBooleanExtra("isPortrait",true);
         if (currentMode == MODE_WINDOW_NORMAL) {
             super.enterWindowFullscreen();
+            Util.SET_LANDSCAPE(instace.getContext());
             ViewGroup vp = (ViewGroup) videoView.getParent();
             if (vp != null)
                 vp.removeView(videoView);
             ViewGroup decorView = (ViewGroup) (Util.scanForActivity(instace.getContext())).getWindow().getDecorView();
             decorView.addView(videoView, new LayoutParams(-1, -1));
-            Util.SET_LANDSCAPE(getContext());
+
         }
     }
 
@@ -71,9 +72,9 @@ public class VideoView extends DemoQSVideoView {
         WeexActivity ac=  (WeexActivity)instace.getContext();
         boolean ispotrait=ac.getIntent().getBooleanExtra("isPortrait",true);
         if(ispotrait){
-            Util.SET_PORTRAIT(getContext());
+            Util.SET_PORTRAIT(ac);
         }else{
-            Util.SET_LANDSCAPE(getContext());
+            Util.SET_LANDSCAPE(ac);
         }
 
     }
