@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +18,6 @@ import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.zvideo.view.VideoView;
 
-import org.song.videoplayer.DemoQSVideoView;
 import org.song.videoplayer.PlayListener;
 
 import java.util.HashMap;
@@ -32,7 +30,7 @@ import wbs.hundsun.com.zvideo.R;
 //import chuangyuan.ycj.videolibrary.widget.VideoPlayerView;
 
 @WeexComponent(name="player")
-public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
+public class WXPVideo extends  WXVContainer<VideoView>{
     Timer timer;
     boolean compelete;
     String title;
@@ -109,10 +107,16 @@ public class WXPVideo extends  WXVContainer<DemoQSVideoView>{
     }
 
 
-    @JSMethod
-    public void hideBottomBar(boolean hide){
-         getHostView().findViewById(org.song.videoplayer.R.id.layout_bottom).setVisibility(hide?View.GONE:View.VISIBLE);
+
+    @WXComponentProp(name = "liveMode")
+    public void setLiveMode(boolean live){
+        getHostView().liveMode=live;
+        if(live)
+            getHostView().showChangeViews();
+
     }
+
+
 
     @WXComponentProp(name = "autoPlay")
     public void setAutoPlay(boolean auto){

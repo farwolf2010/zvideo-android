@@ -3,6 +3,7 @@ package com.zvideo.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.farwolf.weex.activity.WeexActivity;
@@ -21,6 +22,7 @@ public class VideoView extends DemoQSVideoView {
         super(context);
     }
 
+    public boolean liveMode=false;
 
     //移动网络提示框
     @Override
@@ -46,7 +48,18 @@ public class VideoView extends DemoQSVideoView {
         return true;
     }
 
+    @Override
+    public void showChangeViews(View... views) {
+//        super.showChangeViews(views);
+        if(liveMode){
+            for (View v : changeViews)
+                if (v != null)
+                    v.setVisibility(INVISIBLE);
+        }else{
+            super.showChangeViews(views);
+        }
 
+    }
 
     //全屏
     @Override
